@@ -7,10 +7,10 @@ Lawyer allows you to create contracts that specify how an object behaves.
 	require 'lawyer'
 
 	class Pingable < Lawyer::Contract
-	  contains :ping
+	  confirm :ping
 	end
 
-You can then ensure that your class implements the contract.
+You can then ensure that your class implements the contract:
 
 	require 'pingable'
 
@@ -26,63 +26,40 @@ You can then ensure that your class implements the contract.
 
 	Foo.implements(Pingable)
 
+...but this works best when you write loosely coupled objects and then define the
+interfaces between them. You can then write specs to check that a class implements
+a particular contract:
 
-...and then check that the arguments passed to a method match some interface:
-
+    require 'foo'
 	require 'pingable'
 
-	class PingServer
-	  def initialize(client)
-	    Pingable.check(client)
+	describe Foo do
+	  it { should implement(Pingable) }
+	end
 
-	    # If you get this far then you know you can safely call
-		client.ping
+...and use mocks to test methods that expect to receive objects that conform to
+a particular contract:
+
+	describe Pinger do
+	  let(:pingable) { contract_double(Pingable) }
+	  subject(:pinger) { Pinger.new(pingable) }
+
+	  it "pings the pingable" do
+	    subject.run
+		expect(:pingable).to have_received(:ping)
+	  end
+
+      it "can't call methods that aren't part of the contract" do
+	    expect { pingable.pong }.to raise_error(NoMethodError)
 	  end
 	end
 
-...or even force your methods to only use a declared interface:
-
-	require 'pingable'
-
-	class ParanoidPingServer
-	  def initialize(client)
-	    pingable_client = Pingable.proxy(client)
-
-	    # pingable_client only responds to the methods in Pingable
-		pingable_client.ping
-		pingable_client.pong # => NoMethodError
-	  end
-	end
-
-...and add it to your tests:
-
-    describe PingServer do
-	  describe ".new" do
-	    it "checks that the client is pingable" do
-		  expect(PingServer, :new).to check_interface(Pingable)
-		end
-	  end
-	end
-
-...and use mocks to test your code:
-
-	describe PingServer do
-	  let(:pinger) { interface_double(Pingable) }
-	  subject(:server) { PingServer.new(pinger) }
-
-	  it "pings" do
-	    server.run
-		expect(pinger).to have_received(:ping)
-	  end
-	end
+...all based off a single definition of the contract.
 
 This helps you to write loosely coupled code that relies on well defined interfaces.
-By declaring that a class implements a given interface you catch any mismatch between
-the expected behaviour and the implementation when the file is required, instead of
-encountering a runtime error when it's too late. Combining this with argument checking
-and testing those through rspec will give you confidence that changing one part of the
-code (i.e., the interface, the implementation of the interface or the consumer) will
-not break other parts.
+By declaring the contract up front and then using that in your tests you can ensure
+that any mismatches between the expected interface and the actual impelmentations are
+caught as you modify your codebase.
 
 ## Installation
 
@@ -105,21 +82,56 @@ First up, create a contract that specifies the methods available in an interface
     require 'lawyer'
 
 	module Contracts
-	  class HttpClient < Lawyer::Contract
-	    contains :get => [:url]
-		contains :post => [:url, :data]
+	  class Person < Lawyer::Contract
+	    check :name                               # check that the method exists
+		check :name= => 1                         # check the method arity
+		check :rename => [:firstname, :lastname]  # check required named parameters (ruby 2.1 only)
 	  end
 	end
 
-Then write an implementation of it and declare that it implements the interface:
 
-	require 'net/http'
+Add Laywer to your spec_helper:
 
-	class NativeHttpClient
-	  def get(:url)
+	require 'lawyer/rspec'
 
+	RSpec.configure do |config|
+	  config.include Lawyer::RSpec::Matchers
+      config.include Lawyer::RSpec::ContractDouble
+
+      # ...
+    end
+
+Test an implementation:
+
+    require 'contracts/person'
+	require 'person_record'
+
+	describe PersonRecord do
+	  it { should implement(Contracts::Person) }
+
+      # test the implementation
+	end
+
+And test a receiver:
+
+    require 'contracts/person'
+	require 'namer'
+
+    describe Namer do
+	  let(:person) { contract_double(Contracts::Person) }
+	  subject(:namer) { Namer.new(person) }
+
+      it "sets the name" do
+	    expect(person).to receive(:name=).with("John Smith")
+		namer.set_name("John Smith")
 	  end
 	end
+
+## Credits
+
+Many thanks to Jakub Oboza (http://lambdacu.be) for suggesting an original
+implementation of this idea and for providing a sounding board for discussing
+the motivations behind it.
 
 ## Contributing
 
