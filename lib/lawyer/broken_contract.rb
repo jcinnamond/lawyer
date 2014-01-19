@@ -5,13 +5,18 @@ module Lawyer
       @contract = contract.name
       @method_missing_violations = violations.select { |v| v.is_a?(MethodMissingViolation) }
       @wrong_arity_violations = violations.select { |v| v.is_a?(WrongArityViolation) }
+      @wrong_signature_violations = violations.select { |v| v.is_a?(WrongSignatureViolation) }
     end
 
     def to_s
       str = "#{@subject} does not implement <#{@contract}>\n"
       str << explain_violations(@method_missing_violations, "missing")
-      str << "\n" if @method_missing_violations && (@wrong_arity_violations)
+      str << "\n" if @method_missing_violations &&
+                    (@wrong_arity_violations || @wrong_signature_violations)
       str << explain_violations(@wrong_arity_violations, "with the wrong arity")
+      str << "\n" if (@method_missing_violations || @wrong_arity_violations) &&
+                     @wrong_signature_violations
+      str << explain_violations(@wrong_signature_violations, "with the wrong signature")
       str
     end
 

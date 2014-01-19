@@ -1,20 +1,28 @@
 class TestContract < Lawyer::Contract
   confirm :ping
   confirm :pong => 2
+  confirm :pung => [:name, :size]
 end
 
 describe TestContract do
   before :each do
     # Stop modifications to the TestObject from leaking into other specs.
     Object.send(:remove_const, :TestObject) if Object.const_defined?(:TestObject)
-    class TestObject; def pong(a1); end; end
+    class TestObject;
+      def pong(a1); end
+      def pung(name:, hats:); end
+    end
   end
 
   describe "#check!" do
     context "with a compliant object" do
       before :each do
         # Reopen the class and define the required methods
-        class TestObject; def ping; end; def pong(a1, a2); end; end
+        class TestObject;
+          def ping; end
+          def pong(a1, a2); end
+          def pung(name:, size:); end
+        end
       end
 
       it "does not raise an exception when checking a class" do
@@ -54,6 +62,10 @@ describe TestContract do
 
         it "includes the incorrect arity details in the exception" do
           expect(@exception.to_s).to include("\t(1 method with the wrong arity)\n\t[wrong arity] pong (takes 1, requires 2)\n")
+        end
+
+        it "includes required argument mismatch details in the exception" do
+          expect(@exception.to_s).to include("\t(1 method with the wrong signature)\n\t[wrong signature] pung (missing [:size], extra [:hats])\n")
         end
       end
     end
