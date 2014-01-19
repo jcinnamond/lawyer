@@ -17,7 +17,7 @@ module Lawyer
         violations = self.clauses.map do |clause|
           clause.check(klass)
         end
-        violations.flatten!
+        violations.compact!
 
         if violations.any?
           raise Lawyer::BrokenContract.new(klass, self, violations)
