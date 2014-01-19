@@ -130,8 +130,7 @@ And test a receiver:
 ## Credits
 
 Many thanks to Jakub Oboza (http://lambdacu.be) for suggesting an original
-implementation of this idea and for providing a sounding board for discussing
-the motivations behind it.
+implementation of this idea and for discussing the motivations behind it.
 
 ## Contributing
 
