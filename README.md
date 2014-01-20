@@ -83,9 +83,9 @@ First up, create a contract that specifies the methods available in an interface
 
 	module Contracts
 	  class Person < Lawyer::Contract
-	    check :name                               # check that the method exists
-		check :name= => 1                         # check the method arity
-		check :rename => [:firstname, :lastname]  # check required named parameters (ruby 2.1 only)
+	    confirm :name                               # check that the method exists
+	    confirm :name= => 1                         # check the method arity
+	    confirm :rename => [:firstname, :lastname]  # check required named parameters (ruby 2.1 only)
 	  end
 	end
 
