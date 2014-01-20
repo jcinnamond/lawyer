@@ -1,6 +1,6 @@
 module Lawyer
   class WrongArityViolation
-    def initialize(name, expected:, actual:)
+    def initialize(name, expected: 0, actual: 0)
       @name = name
       @expected = expected
       @actual = actual

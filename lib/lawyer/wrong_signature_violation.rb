@@ -1,6 +1,6 @@
 module Lawyer
   class WrongSignatureViolation
-    def initialize(name, missing:, extra:)
+    def initialize(name, missing: [], extra: [])
       @name = name
       @missing = missing
       @extra = extra
