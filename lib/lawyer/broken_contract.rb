@@ -11,11 +11,11 @@ module Lawyer
     def to_s
       str = "#{@subject} does not implement <#{@contract}>\n"
       str << explain_violations(@method_missing_violations, "missing")
-      str << "\n" if @method_missing_violations &&
-                    (@wrong_arity_violations || @wrong_signature_violations)
+      str << "\n" if @method_missing_violations.any? &&
+                    (@wrong_arity_violations/any? || @wrong_signature_violations.any?)
       str << explain_violations(@wrong_arity_violations, "with the wrong arity")
-      str << "\n" if (@method_missing_violations || @wrong_arity_violations) &&
-                     @wrong_signature_violations
+      str << "\n" if (@method_missing_violations.any? || @wrong_arity_violations.any?) &&
+                     @wrong_signature_violations.any?
       str << explain_violations(@wrong_signature_violations, "with the wrong signature")
       str
     end
