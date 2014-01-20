@@ -17,7 +17,7 @@ module Lawyer
         end
 
         failure_message_for_should do |actual|
-          @expectation.to_s
+          @exception.to_s
         end
       end
     end
