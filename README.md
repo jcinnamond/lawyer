@@ -90,16 +90,9 @@ First up, create a contract that specifies the methods available in an interface
 	end
 
 
-Add Laywer to your spec_helper:
+Add Laywer to your spec_helper by including:
 
 	require 'lawyer/rspec'
-
-	RSpec.configure do |config|
-	  config.include Lawyer::RSpec::Matchers
-      config.include Lawyer::RSpec::ContractDouble
-
-      # ...
-    end
 
 Test an implementation:
 
