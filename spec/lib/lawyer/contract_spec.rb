@@ -4,6 +4,32 @@ class TestContract < Lawyer::Contract
   confirm :pung => [:name, :size]
 end
 
+class TestInitialize < Lawyer::Contract
+  confirm :initialize => [:arg]
+end
+
+describe TestInitialize do
+  before :each do
+    Object.send(:remove_const, :TestObjectNew) if Object.const_defined?(:TestObjectNew)
+  end
+
+  it "does not raise an exception is the contact is satisified" do
+    class TestObjectNew
+      def initialize(arg:)
+      end
+    end
+
+    expect { TestInitialize.check!(TestObjectNew) }.not_to raise_error
+  end
+
+  it "raises an exception if the signature is wrong" do
+    class TestObjectNew; end
+
+    expect { TestInitialize.check!(TestObjectNew) }.to raise_error(Lawyer::BrokenContract)
+  end
+end
+
+
 describe TestContract do
   before :each do
     # Stop modifications to the TestObject from leaking into other specs.

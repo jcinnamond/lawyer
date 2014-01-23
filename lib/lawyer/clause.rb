@@ -38,7 +38,7 @@ module Lawyer
     end
 
     def missing_method?(subject)
-      !subject.instance_methods.include?(@name)
+      (@name != :initialize) && !subject.instance_methods.include?(@name)
     end
 
     def wrong_arity?(subject)
