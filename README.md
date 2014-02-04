@@ -1,5 +1,8 @@
 # Lawyer
 
+
+![Strong Duck Typing](https://raw.github.com/jcinnamond/lawyer/master/lawyer.png)
+
 Strong Duck Typing for Ruby.
 
 Lawyer allows you to create contracts that specify how an object behaves.
