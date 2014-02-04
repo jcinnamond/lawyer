@@ -1,7 +1,7 @@
 # Lawyer
 
 
-![Strong Duck Typing](https://raw.github.com/jcinnamond/lawyer/master/lawyer.png)
+![Strong Duck Typing](https://raw.github.com/jcinnamond/lawyer/master/lawyer.jpg)
 
 Strong Duck Typing for Ruby.
 
