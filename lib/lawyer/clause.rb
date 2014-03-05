@@ -4,7 +4,7 @@ require 'lawyer/wrong_signature_violation'
 
 module Lawyer
   class Clause
-    attr_reader :name
+    attr_reader :name, :arity, :signature
 
     def initialize(params)
       @arity = nil

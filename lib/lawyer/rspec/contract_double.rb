@@ -2,7 +2,8 @@ module Lawyer
   module RSpec
     module ContractDouble
       def contract_double(contract, return_values = {})
-        methods = {}
+        the_double = double(contract.name)
+
         contract.clauses.each do |clause|
           next if clause.name.to_sym == :initialize
 
@@ -11,9 +12,18 @@ module Lawyer
                          else
                            true
                          end
-          methods[clause.name] = return_value
+
+          with = if clause.arity
+                   clause.arity.times.map { anything }
+                 elsif clause.signature
+                   clause.signature.inject({}) { |acc, name| acc[name] = anything }
+                 else
+                   anything
+                 end
+
+          allow(the_double).to receive(clause.name).with(with).and_return(return_value)
         end
-        double(contract.name, methods)
+        the_double
       end
     end
   end
