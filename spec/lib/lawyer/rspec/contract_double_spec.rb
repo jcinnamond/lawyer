@@ -3,7 +3,7 @@ require 'lawyer/rspec'
 class DoublableContract < Lawyer::Contract
   confirm :ping
   confirm :arity => 2
-  confirm :named => [:arg]
+  confirm :named => [:arg, :arg2]
 end
 
 describe Lawyer::RSpec::ContractDouble do

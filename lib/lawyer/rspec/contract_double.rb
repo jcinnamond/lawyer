@@ -16,7 +16,7 @@ module Lawyer
           with = if clause.arity
                    clause.arity.times.map { anything }
                  elsif clause.signature
-                   clause.signature.inject({}) { |acc, name| acc[name] = anything }
+                   clause.signature.inject({}) { |acc, name| acc[name] = anything; acc }
                  else
                    anything
                  end
