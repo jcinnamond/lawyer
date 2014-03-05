@@ -17,9 +17,11 @@ describe Lawyer::RSpec::ContractDouble do
 
   it "checks method arity" do
     expect { the_double.arity(1) }.to raise_error(RSpec::Mocks::MockExpectationError)
+    expect { the_double.arity(1, 2) }.not_to raise_error
   end
 
   it "checks named arguments" do
     expect { the_double.named }.to raise_error(RSpec::Mocks::MockExpectationError)
+    expect { the_double.named(arg: 1, arg2: 2) }.not_to raise_error
   end
 end

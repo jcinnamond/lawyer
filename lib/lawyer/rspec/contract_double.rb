@@ -13,15 +13,12 @@ module Lawyer
                            true
                          end
 
-          with = if clause.arity
-                   clause.arity.times.map { anything }
-                 elsif clause.signature
-                   clause.signature.inject({}) { |acc, name| acc[name] = anything; acc }
-                 else
-                   anything
-                 end
-
-          allow(the_double).to receive(clause.name).with(with).and_return(return_value)
+          receiver = allow(the_double).to receive(clause.name).and_return(return_value)
+          if clause.arity
+            receiver.with(*clause.arity.times.map { anything })
+          elsif clause.signature
+            receiver.with(clause.signature.inject({}) { |acc, name| acc[name] = anything; acc })
+          end
         end
         the_double
       end
