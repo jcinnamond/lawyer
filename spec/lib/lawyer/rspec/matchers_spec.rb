@@ -1,6 +1,6 @@
 require 'lawyer/rspec'
 
-describe Lawyer::RSpec::Matchers do
+RSpec.describe Lawyer::RSpec::Matchers do
   include Lawyer::RSpec::Matchers
   let(:subject) { double("Module", name: "Module") }
   let(:contract) { double("contract", check!: true, name: "Contract") }
