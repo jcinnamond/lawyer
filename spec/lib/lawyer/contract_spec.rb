@@ -1,4 +1,5 @@
 class TestContract < Lawyer::Contract
+  confirm :pang => -1
   confirm :ping
   confirm :pong => 2
   confirm :pung => [:name, :size]
@@ -35,6 +36,7 @@ describe TestContract do
     # Stop modifications to the TestObject from leaking into other specs.
     Object.send(:remove_const, :TestObject) if Object.const_defined?(:TestObject)
     class TestObject;
+      def pang(*args); end
       def pong(a1); end
       def pung(name:, hats:); end
     end
@@ -45,6 +47,7 @@ describe TestContract do
       before :each do
         # Reopen the class and define the required methods
         class TestObject;
+          def pang(*args); end
           def ping; end
           def pong(a1, a2); end
           def pung(name:, size:); end
