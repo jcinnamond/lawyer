@@ -6,12 +6,12 @@ class DoublableContract < Lawyer::Contract
   confirm :named => [:arg, :arg2]
 end
 
-describe Lawyer::RSpec::ContractDouble do
+RSpec.describe Lawyer::RSpec::ContractDouble do
   include Lawyer::RSpec::ContractDouble
 
-  subject(:the_double) { contract_double(DoublableContract)  }
+  subject(:the_double) { contract_double(DoublableContract) }
 
-  it { should be_a(RSpec::Mocks::Mock) }
+  it { should be_a(RSpec::Mocks::Double) }
   it { should respond_to(:ping) }
   it { should_not respond_to(:pong) }
 

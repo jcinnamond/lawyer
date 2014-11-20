@@ -24,7 +24,7 @@ class Foo
   def ping
     puts "ping"
   end
-  
+
   def pong
     puts "pong"
   end
@@ -41,7 +41,7 @@ a particular contract:
 require 'foo'
 require 'pingable'
 
-describe Foo do
+RSpec.describe Foo do
   it { should implement(Pingable) }
 end
 ```
@@ -50,7 +50,7 @@ end
 a particular contract:
 
 ```rb
-describe Pinger do
+RSpec.describe Pinger do
   let(:pingable) { contract_double(Pingable) }
   subject(:pinger) { Pinger.new(pingable) }
 
@@ -120,9 +120,9 @@ Test an implementation:
 require 'contracts/person'
 require 'person_record'
 
-describe PersonRecord do
+RSpec.describe PersonRecord do
   it { should implement(Contracts::Person) }
-  
+
   # test the implementation
 end
 ```
@@ -133,7 +133,7 @@ And test a receiver:
 require 'contracts/person'
 require 'namer'
 
-describe Namer do
+RSpec.describe Namer do
   let(:person) { contract_double(Contracts::Person) }
   subject(:namer) { Namer.new(person) }
 

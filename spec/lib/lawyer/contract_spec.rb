@@ -8,7 +8,7 @@ class TestInitialize < Lawyer::Contract
   confirm :initialize => [:arg]
 end
 
-describe TestInitialize do
+RSpec.describe TestInitialize do
   before :each do
     Object.send(:remove_const, :TestObjectNew) if Object.const_defined?(:TestObjectNew)
   end
@@ -30,7 +30,7 @@ describe TestInitialize do
 end
 
 
-describe TestContract do
+RSpec.describe TestContract do
   before :each do
     # Stop modifications to the TestObject from leaking into other specs.
     Object.send(:remove_const, :TestObject) if Object.const_defined?(:TestObject)

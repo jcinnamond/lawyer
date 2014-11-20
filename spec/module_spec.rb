@@ -1,4 +1,4 @@
-describe Module do
+RSpec.describe Module do
   describe "#implements" do
     it "checks the module against the contract" do
       class A; end
